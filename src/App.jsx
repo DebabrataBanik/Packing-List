@@ -2,6 +2,7 @@ import { useMemo, useState, useCallback } from 'react'
 import Form from './components/Form'
 import Items from './components/Items';
 import Filter from './components/Filter';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -72,6 +73,8 @@ function App() {
       <Items itemList={sortedItems} removeItem={removeItem} handleCheck={handleCheck} />
 
       <Filter sortMethod={sortMethod} setSortMethod={setSortMethod} />
+
+      <Footer items={itemList} />
     </main>
     </>
   )
