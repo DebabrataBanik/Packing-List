@@ -1,10 +1,10 @@
 function Filter({
-  setSortMtd
+  setSortMethod
 }) {
 
   function handleChange(e){
-    setSortMtd(e.target.value)
-    console.log(e.target.value)
+    setSortMethod(e.target.value)
+    // console.log(e.target.value)
   }
 
   return (

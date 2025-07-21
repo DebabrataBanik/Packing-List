@@ -1,3 +1,5 @@
+import React from "react";
+
 function Items({
   itemList, 
   removeItem,
@@ -36,4 +38,4 @@ function Items({
   )
 }
 
-export default Items
+export default React.memo(Items);

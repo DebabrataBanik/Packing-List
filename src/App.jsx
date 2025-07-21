@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import Form from './components/Form'
 import Items from './components/Items';
 import Filter from './components/Filter';
@@ -11,9 +11,9 @@ function App() {
   const [msg, setMsg] = useState('')
   const [sortMethod, setSortMethod] = useState('input');
 
-  console.log('Number of items',quantity)
-  console.log('Items array',itemList)
-  console.log('Item',item)
+  // console.log('Number of items',quantity)
+  // console.log('Items array',itemList)
+  // console.log('Item',item)
 
   function appendItem(){
     if(!item.trim()){
@@ -39,17 +39,15 @@ function App() {
   ]);
   }
 
-  function removeItem(id){
-    const newItemList = itemList.filter(item => item.id !== id)
-    setItemList(newItemList)
-  }
+  const removeItem = useCallback((id) => {
+    setItemList(prev => prev.filter(item => item.id !== id))
+  }, [])
 
-  function handleCheck(id){
+  const handleCheck = useCallback((id) => {
     setItemList(prev => 
-        prev.map(item => item.id === id ? {...item, packed: !item.packed } : item
-      )
-    )
-  }
+      prev.map(item => item.id === id ? {...item, packed: !item.packed } : item 
+    ));
+  }, [])
 
   const sortedItems = useMemo(() => {
     let sorted = [...itemList];
@@ -71,9 +69,6 @@ function App() {
     <main>
       <Form item={item} quantity={quantity} setQuantity={setQuantity} handleSubmit={appendItem} setItem={setItem} msg={msg} setMsg={setMsg}/>
 
-      {
-        
-      }
       <Items itemList={sortedItems} removeItem={removeItem} handleCheck={handleCheck} />
 
       <Filter sortMethod={sortMethod} setSortMethod={setSortMethod} />
