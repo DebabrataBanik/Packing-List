@@ -8,8 +8,8 @@ function Filter({
   }
 
   return (
-
-    <div>
+    
+    <div className="filter-container">
       <select name="sortMethod" onChange={handleChange}>
         <option value='input'>Sort by Input Order </option>
         <option value='name'>Sort by Name </option>

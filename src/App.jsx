@@ -2,7 +2,7 @@ import { useMemo, useState, useCallback } from 'react'
 import Form from './components/Form'
 import Items from './components/Items';
 import Filter from './components/Filter';
-import Footer from './components/Footer';
+import PackingStatus from './components/PackingStatus';
 
 function App() {
 
@@ -64,17 +64,20 @@ function App() {
   return (
     <>
     <header>
-      <h1>BackPack</h1>
-      <p>Fill your bag with BackPack. Make sure you don't forget anything.</p>
+      <h1>Packing List</h1>
+      {/* <p></p> */}
     </header>
     <main>
-      <Form item={item} quantity={quantity} setQuantity={setQuantity} handleSubmit={appendItem} setItem={setItem} msg={msg} setMsg={setMsg}/>
+      <PackingStatus items={itemList} />
+
+      <div className='form-filter'>
+        <Form item={item} quantity={quantity} setQuantity={setQuantity} handleSubmit={appendItem} setItem={setItem} msg={msg} setMsg={setMsg}/>
+        <Filter sortMethod={sortMethod} setSortMethod={setSortMethod} />
+      </div>
 
       <Items itemList={sortedItems} removeItem={removeItem} handleCheck={handleCheck} />
 
-      <Filter sortMethod={sortMethod} setSortMethod={setSortMethod} />
 
-      <Footer items={itemList} />
     </main>
     </>
   )

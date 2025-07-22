@@ -1,3 +1,6 @@
+import { Trash } from 'lucide-react';
+import { Plus } from 'lucide-react';
+
 function Form({
   quantity,
   item,
@@ -27,28 +30,28 @@ function Form({
   }
 
   return (
-    <div>
-      <p>What do u need for your trip?</p>
+    <div className="form-container">
+      {/* <p>What do u need for your trip?</p> */}
       <form 
         className="input-container" 
         onSubmit={handleFormSubmit}
       >
+        <input 
+          value={item} 
+          onChange={handleSetItem} 
+          type="text" 
+          placeholder="add item to list..."  
+        />
         <input 
           value={quantity} 
           onChange={handleSetQuantity} type="number" 
           min="1" max='20' 
           placeholder="quantity"
         />
-        <input 
-          value={item} 
-          onChange={handleSetItem} 
-          type="text" 
-          placeholder="add item"  
-        />
         
-        <button type="submit">Add</button>   
+        <button type="submit"><Plus size={17} /></button>   
       </form>
-      <p>{msg}</p>
+      {/* <p>{msg}</p> */}
     </div>
   )
 }
