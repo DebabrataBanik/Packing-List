@@ -123,3 +123,10 @@ Because the child is re-rendering anyway — you're not giving React any instruc
 - When props are stable most of the time
 
 ### For tiny components — don’t memoize everything, it can backfire (extra comparison cost).
+
+# Continued Development
+
+- Add responsiveness.
+- Add categories and apply filter.
+- Add a light mode.
+- Work on different UI layouts.
