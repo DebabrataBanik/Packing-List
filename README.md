@@ -1,10 +1,10 @@
 # React's Re-render and its optimzation
 
-### ✅ React re-renders parent when any state in it changes
+### ✅ React re-renders component when any state in it changes
 
 Simple. That’s the default behavior.
 
-### ✅ If parent re-renders, all its child components will also re-render — by default
+### ✅ If parent component re-renders, all its child components will also re-render — by default
 
 Even if the prop you passed to child didn’t change.
 
@@ -28,7 +28,7 @@ Because React can compare 'hello' === 'hello' and say: “Nothing changed.”
 
 **Even if they look the same, they are new references, so React thinks they changed.**
 
-The same object/arr/function their refs dont match, new refs are created every re-render.
+The same object/array/function - their references don't match because new references are created every re-render.
 
 ### ✅ So to help React.memo do its job, you use:
 
@@ -94,6 +94,52 @@ const message = useMemo(() => ({ text }), [text]);
 
 If it was for function then `useCallback()` were to be used.
 
+## What about the dependency array
+
+The dependency array should include all values from the outer scope that your callback uses directly.
+
+```javascript
+const handleChange = useCallback((e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({
+    ...prev, [name]: value
+  }))
+}, []);
+```
+- setFormData comes from useState. React guarantees it's stable within the same component instance, so you don't need to add it to dependencies.
+
+- e is passed in → it’s local, no need in deps.
+
+- No other variables used.
+
+✅ So [] is correct here.
+That means handleChange will never change identity, which plays nicely with your React.memo(InputField).
+
+### Where deps matter
+
+```javascript
+const handleSubmit = useCallback((e) => {
+  e.preventDefault();
+  if (isValid) navigate('/profile');
+}, [isValid, navigate]);
+```
+
+Here:
+
+- isValid → comes from component state, so it changes as the form changes.
+
+- navigate → React Router guarantees it's stable, but ESLint rules suggest including it for consistency.
+
+So this one needs deps.
+
+## Dependency Array Rules
+
+✅ **Include**: Variables, functions, or objects from component scope that are used inside the callback
+❌ **Don't include**: 
+- Parameters passed to the callback (like `e` in event handlers)
+- useState setters (they're guaranteed stable)
+- useRef.current values (they're mutable references)
+
 ## More to Know
 
 > If you don’t use `React.memo` on the _child_, then using `useMemo` and `useCallback` in the _parent_ won’t help prevent child re-renders.
@@ -110,9 +156,25 @@ Because the child is re-rendering anyway — you're not giving React any instruc
 
 - Without `React.memo`, React will blindly re-render the child no matter what.
 
+## When to Actually Use Them:
+
+### useCallback:
+
+- When passing functions to child components
+- When functions are used in other hook dependencies
+
+### useMemo:
+
+- When you have expensive calculations
+- When creating objects/arrays that are passed to children
+
+Most of the time: You don't need them! 🎯
+
 ## Performance Reminder
 
 ### Don’t go overboard.
+
+⚠️ **Important**: useCallback and useMemo have their own overhead - they store previous values and run comparisons. Only use them when the benefit outweighs this cost.
 
 ### Only use React.memo + useCallback/useMemo:
 
